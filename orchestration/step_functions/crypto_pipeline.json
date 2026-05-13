@@ -1,0 +1,43 @@
+{
+    "Comment": "Crypto Data Pipeline",
+  
+    "StartAt": "TriggerGlueJob",
+  
+    "States": {
+  
+      "TriggerGlueJob": {
+  
+        "Type": "Task",
+  
+        "Resource": "arn:aws:states:::lambda:invoke",
+  
+        "Parameters": {
+          "FunctionName": "trigger-glue-job"
+        },
+  
+        "Next": "WaitForGlue"
+      },
+  
+      "WaitForGlue": {
+  
+        "Type": "Wait",
+  
+        "Seconds": 60,
+  
+        "Next": "LoadWarehouse"
+      },
+  
+      "LoadWarehouse": {
+  
+        "Type": "Task",
+  
+        "Resource": "arn:aws:states:::lambda:invoke",
+  
+        "Parameters": {
+          "FunctionName": "trigger-redshift-loader"
+        },
+  
+        "End": true
+      }
+    }
+  }
